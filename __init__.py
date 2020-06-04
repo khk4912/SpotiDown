@@ -1,1 +1,1 @@
-__name__ = "SpotiDown"
+__name__ = "spdl"

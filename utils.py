@@ -1,4 +1,4 @@
-import CONFIG
+import SpotiDown.CONFIG as CONFIG
 from spotipy import Spotify, SpotifyClientCredentials
 
 
