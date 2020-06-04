@@ -1,5 +1,5 @@
-from utils import make_auth
-from exceptions import InvaildType
+from spdl.utils import make_auth
+from spdl.exceptions import InvaildType
 from spotipy import Spotify
 from pytube import YouTube
 

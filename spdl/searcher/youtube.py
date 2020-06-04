@@ -1,5 +1,5 @@
 import requests
-from exceptions import VideoNotFound
+from spdl.exceptions import VideoNotFound
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.youtube.com/results?sp=EgIQAQ%253D%253D&q={}"
