@@ -4,7 +4,7 @@ from spotipy import Spotify
 from pytube import YouTube
 
 
-class SpotifySearch:
+class SpotifySearcher:
     """
     Spotify playlist/track 정보 검색 관련 클래스입니다.
 
@@ -14,20 +14,16 @@ class SpotifySearch:
 
     """
 
-    def __init__(self, playlist_or_track: str, id_or_url: str):
-        if playlist_or_track not in ["playlist", "track"]:
-            raise InvaildType("playlist 또는 track이 아닙니다.")
-
-        self.playlist_or_track = playlist_or_track
+    def __init__(self, id_or_url: str):
         self.cred = make_auth()
         self.id_or_url = id_or_url
 
-    def _playlist(self) -> dict:
+    def playlist(self) -> list:
         """
         playlist를 검색하여 필요한 정보를 리턴하는 메소드입니다.
 
         Returns:
-            성공적으로 검색하면 parse된 dict를 리턴합니다.    
+            성공적으로 검색하면 플레이리스트의 곡의 parse된 dict를 가진 list를 리턴합니다.    
         """
         playlist_info = self.cred.playlist(self.id_or_url)
         parsed_info = [
@@ -45,7 +41,7 @@ class SpotifySearch:
         ]
         return parsed_info
 
-    def _track(self) -> dict:
+    def track(self) -> dict:
         """
         track을 검색하여 필요한 정보를 리턴하는 메소드입니다.
 
@@ -65,12 +61,6 @@ class SpotifySearch:
             },
         }
         return parsed_info
-
-    def info(self) -> dict:
-        # TODO : Excpetion 핸들(?)
-        if self.playlist_or_track == "playlist":
-            return self._playlist()
-        return self._track()
 
 
 """
