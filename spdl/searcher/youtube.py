@@ -11,7 +11,7 @@ class YouTubeSearcher:
 
     def search_with_title(self, title: str) -> list:
         """
-        영상 제목으로 유튜브 링크 주소 리스트를 반환합니다.
+        영상 제목으로 유튜브 vID 리스트를 반환합니다.
 
         Params:
             title (str) : 검색할 영상의 제목
@@ -25,5 +25,5 @@ class YouTubeSearcher:
         if len(videos) == 0:
             raise VideoNotFound
 
-        hrefs = [x["href"] for x in videos]
+        hrefs = [x["href"][9:] for x in videos]
         return hrefs
