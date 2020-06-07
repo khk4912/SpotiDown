@@ -23,6 +23,7 @@ class Downloader:
     def download(self, video_id: Union[str, list]):
         if isinstance(video_id, str):
             video_id = [video_id]
+
         self._download_ytdl(video_id)
 
     def _download_ytdl(self, video_id: list):
@@ -31,3 +32,5 @@ class Downloader:
 
         with youtube_dl.YoutubeDL(YTDL_OPS) as ytdl:
             ytdl.download(video_id)
+
+        return video_id
