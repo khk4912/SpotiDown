@@ -22,9 +22,10 @@ class Main:
         s.make_auth()
         playlist = s.playlist(playlist_url)
 
-        for i in playlist:
+        for info in playlist:
             vid = YouTubeSearcher.search(
-                "{} - {}".format(", ".join(i["artist"]), i["name"])
+                "{} - {}".format(", ".join(info["artist"]), info["name"])
             )
 
-            dl.download(vid)
+            f = dl.download(vid[0])
+            tag.apply_meta(f, info)

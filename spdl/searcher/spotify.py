@@ -20,6 +20,7 @@ class SpotifySearcher:
         self.spoti = None
 
     def make_auth(self):
+        # TODO : 커스텀 CLIENT_ID / CLIENT_SECRET 사용 가능하게
         """
         CONFIG.py의 CLIENT_ID와 CLIENT_SECRET을 이용하여 인증합니다.
 
