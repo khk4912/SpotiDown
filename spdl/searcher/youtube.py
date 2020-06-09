@@ -1,6 +1,6 @@
 import requests
-from spdl.exceptions import VideoNotFound
 from bs4 import BeautifulSoup
+from spdl.exceptions import VideoNotFound
 
 BASE_URL = "https://www.youtube.com/results?sp=EgIQAQ%253D%253D&q={}"
 
@@ -24,8 +24,7 @@ class YouTubeSearcher:
         videos = soup.select(".yt-uix-tile-link")
 
         if len(videos) == 0:
-            # TODO : 많은 전송으로 영상 검색 실패 대응/해결하기
-            pass
+            raise VideoNotFound
 
         hrefs = [x["href"][9:] for x in videos]
         return hrefs

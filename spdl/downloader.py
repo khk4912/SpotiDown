@@ -33,4 +33,4 @@ class Downloader:
         with youtube_dl.YoutubeDL(YTDL_OPS) as ytdl:
             ytdl.download(video_id)
 
-        return video_id
+        return video_id + ".mp3"
