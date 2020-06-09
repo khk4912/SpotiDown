@@ -1,7 +1,7 @@
 import os
 import re
-import eyed3
 import requests
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TORY, TYER, APIC, TRCK
 
 
 class Tag:
@@ -21,14 +21,23 @@ class Tag:
         album_cover = self._album_cover_download(
             meta["album"]["images"][0]["url"]
         )
+        artists = ", ".join(meta["album"]["artists"])
+        tag = ID3(filename)
+        tag["TIT2"] = TIT2(3, meta["name"])
+        tag["TPE1"] = TPE1(3, artists)
+        tag["TALB"] = TALB(3, meta["album"]["name"])
+        tag["TRCK"] = TRCK(3, str(meta["track_number"]))
+        tag["TYER"] = TYER(3, meta["album"]["released_at"].split("-")[0])
+        tag["APIC"] = APIC(
+            encoding=3,
+            mime="image/jpeg",
+            type=3,
+            desc="Album Cover",
+            data=album_cover,
+        )
+        tag.save(v2_version=3)
 
-        tag = eyed3.load(filename).tag
-        tag.artist = ", ".join(meta["artist"])
-        tag.album = meta["album"]["name"]
-        tag.title = meta["name"]
-        tag.track_num = meta["track_number"]
-        tag.release_date = meta["album"]["released_at"].split("-")[0]
-        tag.images.set(3, album_cover, "image/jpeg")
-        tag.save()
-
-        os.rename(filename, self._safe_name(meta["name"]) + ".mp3")
+        os.rename(
+            filename,
+            self._safe_name("{} - {}".format(artists, meta["name"])) + ".mp3",
+        )

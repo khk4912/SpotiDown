@@ -54,6 +54,9 @@ class SpotifySearcher:
                     "name": x["track"]["album"]["name"],
                     "released_at": x["track"]["album"]["release_date"],
                     "images": x["track"]["album"]["images"],
+                    "artists": [
+                        y["name"] for y in x["track"]["album"]["artists"]
+                    ],
                 },
             }
             for x in playlist_info["tracks"]["items"]
@@ -78,6 +81,7 @@ class SpotifySearcher:
                 "name": track_album["name"],
                 "released_at": track_album["release_date"],
                 "images": track_album["images"],
+                "artists": [y["name"] for y in track_album["artists"]],
             },
         }
         return parsed_info
@@ -100,6 +104,7 @@ class SpotifySearcher:
                     "name": album_info["name"],
                     "released_at": album_info["release_date"],
                     "images": album_info["images"],
+                    "artists": [y["name"] for y in album_info["artists"]],
                 },
             }
             for x in album_info["tracks"]["items"]

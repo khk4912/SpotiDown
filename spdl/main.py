@@ -23,9 +23,67 @@ class Main:
         playlist = s.playlist(playlist_url)
 
         for info in playlist:
-            vid = YouTubeSearcher.search(
-                "{} - {}".format(", ".join(info["artist"]), info["name"])
-            )
+            try:
+                vid = YouTubeSearcher.search(
+                    "{} - {}".format(", ".join(info["artist"]), info["name"])
+                )
+            except:
+                print(
+                    "Ignore {} - {}".format(
+                        ", ".join(info["artist"]), info["name"]
+                    )
+                )
+                continue
+
+            f = dl.download(vid[0])
+            tag.apply_meta(f, info)
+
+    def download_track(self, track_url: str):
+
+        s = SpotifySearcher()
+        dl = Downloader()
+        tag = Tag()
+
+        s.make_auth()
+        playlist = s.track(track_url)
+
+        for info in playlist:
+            try:
+                vid = YouTubeSearcher.search(
+                    "{} - {}".format(", ".join(info["artist"]), info["name"])
+                )
+            except:
+                print(
+                    "Ignore {} - {}".format(
+                        ", ".join(info["artist"]), info["name"]
+                    )
+                )
+                continue
+
+            f = dl.download(vid[0])
+            tag.apply_meta(f, info)
+
+    def download_album(self, album_url: str):
+
+        s = SpotifySearcher()
+        dl = Downloader()
+        tag = Tag()
+
+        s.make_auth()
+        playlist = s.album(album_url)
+
+        for info in playlist:
+            try:
+                vid = YouTubeSearcher.search(
+                    "{} - {}".format(", ".join(info["artist"]), info["name"])
+                )
+            except:
+                print(
+                    "Ignore {} - {}".format(
+                        ", ".join(info["artist"]), info["name"]
+                    )
+                )
+                continue
 
             f = dl.download(vid[0])
             tag.apply_meta(f, info)
