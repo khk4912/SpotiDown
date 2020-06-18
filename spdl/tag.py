@@ -23,19 +23,21 @@ class Tag:
         )
         artists = ", ".join(meta["album"]["artists"])
         tag = ID3(filename)
-        tag["TIT2"] = TIT2(3, meta["name"])
-        tag["TPE1"] = TPE1(3, artists)
-        tag["TALB"] = TALB(3, meta["album"]["name"])
-        tag["TRCK"] = TRCK(3, str(meta["track_number"]))
-        tag["TYER"] = TYER(3, meta["album"]["released_at"].split("-")[0])
+        tag["TIT2"] = TIT2(3, meta["name"])  # Title
+        tag["TPE1"] = TPE1(3, artists)  # Artist
+        tag["TALB"] = TALB(3, meta["album"]["name"])  # Album Title
+        tag["TRCK"] = TRCK(3, str(meta["track_number"]))  # Track Number
+        tag["TYER"] = TYER(
+            3, meta["album"]["released_at"].split("-")[0]
+        )  # Released Year
         tag["APIC"] = APIC(
             encoding=3,
             mime="image/jpeg",
             type=3,
             desc="Album Cover",
             data=album_cover,
-        )
-        tag.save(v2_version=3)
+        )  # Album Cover
+        tag.save(v2_version=3)  # ID3
 
         os.rename(
             filename,

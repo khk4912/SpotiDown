@@ -45,23 +45,21 @@ class Main:
         tag = Tag()
 
         s.make_auth()
-        playlist = s.track(track_url)
+        info = s.track(track_url)
 
-        for info in playlist:
-            try:
-                vid = YouTubeSearcher.search(
-                    "{} - {}".format(", ".join(info["artist"]), info["name"])
+        try:
+            vid = YouTubeSearcher.search(
+                "{} - {}".format(", ".join(info["artist"]), info["name"])
+            )
+        except:
+            print(
+                "Ignore {} - {}".format(
+                    ", ".join(info["artist"]), info["name"]
                 )
-            except:
-                print(
-                    "Ignore {} - {}".format(
-                        ", ".join(info["artist"]), info["name"]
-                    )
-                )
-                continue
+            )
 
-            f = dl.download(vid[0])
-            tag.apply_meta(f, info)
+        f = dl.download(vid[0])
+        tag.apply_meta(f, info)
 
     def download_album(self, album_url: str):
 
@@ -70,9 +68,9 @@ class Main:
         tag = Tag()
 
         s.make_auth()
-        playlist = s.album(album_url)
+        album = s.album(album_url)
 
-        for info in playlist:
+        for info in album:
             try:
                 vid = YouTubeSearcher.search(
                     "{} - {}".format(", ".join(info["artist"]), info["name"])
@@ -84,6 +82,6 @@ class Main:
                     )
                 )
                 continue
-
+            print(vid)
             f = dl.download(vid[0])
             tag.apply_meta(f, info)
