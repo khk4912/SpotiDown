@@ -1,7 +1,8 @@
+import os
 from spdl.tag import Tag
+from spdl.downloader import Downloader
 from spdl.searcher.spotify import SpotifySearcher
 from spdl.searcher.youtube import YouTubeSearcher
-from spdl.downloader import Downloader
 
 
 class Main:
@@ -22,7 +23,13 @@ class Main:
         s.make_auth()
         playlist = s.playlist(playlist_url)
 
-        for info in playlist:
+        origin = os.curdir
+        playlist_name = tag._safe_name(playlist["playlist_name"])
+        if not os.path.exists(playlist_name):
+            os.mkdir(playlist_name)
+        os.chdir(playlist_name)
+
+        for info in playlist["parsed"]:
             try:
                 vid = YouTubeSearcher.search(
                     "{} - {}".format(", ".join(info["artist"]), info["name"])
@@ -36,7 +43,9 @@ class Main:
                 continue
 
             f = dl.download(vid[0])
+            print("\n")
             tag.apply_meta(f, info)
+        os.chdir(origin)
 
     def download_track(self, track_url: str):
 
@@ -59,6 +68,7 @@ class Main:
             )
 
         f = dl.download(vid[0])
+        print("\n")
         tag.apply_meta(f, info)
 
     def download_album(self, album_url: str):
@@ -69,8 +79,14 @@ class Main:
 
         s.make_auth()
         album = s.album(album_url)
+        album_name = tag._safe_name(album["album_name"])
 
-        for info in album:
+        origin = os.curdir
+        if not os.path.exists(album_name):
+            os.mkdir(album_name)
+        os.chdir(album_name)
+
+        for info in album["parsed"]:
             try:
                 vid = YouTubeSearcher.search(
                     "{} - {}".format(", ".join(info["artist"]), info["name"])
@@ -82,6 +98,8 @@ class Main:
                     )
                 )
                 continue
-            print(vid)
             f = dl.download(vid[0])
+            print("\n")
             tag.apply_meta(f, info)
+
+        os.chdir(origin)

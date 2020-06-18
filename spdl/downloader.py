@@ -1,10 +1,24 @@
-import youtube_dl
 import re
+import youtube_dl
 from typing import Union
+from spdl.utils import MyLogger
+
+
+# def my_hook(info):
+#     if info["status"] == "downloading":
+#         print(
+#             "\n",
+#             f"\rDownloading {info['filename']} ({info['_percent_str']}, {info['_eta_str']})...",
+#         )
+#     elif info["status"] == "finished":
+#         print("[download] Download Finished.")
+
 
 YTDL_OPS = {
     "format": "bestaudio/best",
     "outtmpl": "%(id)s.%(ext)s",
+    # "logger" : MyLogger()
+    # "progress_hooks": [my_hook],
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",
@@ -35,3 +49,4 @@ class Downloader:
             ytdl.download(video_id)
 
         return video_id[0] + ".mp3"
+
