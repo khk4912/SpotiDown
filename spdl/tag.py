@@ -1,7 +1,8 @@
 import os
 import re
 import requests
-from mutagen.id3 import ID3, TIT2, TALB, TPE1, TORY, TYER, APIC, TRCK
+from spdl.searcher.lyrics import LyricsSearcher
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TORY, TYER, APIC, TRCK, USLT
 
 
 class Tag:
@@ -22,6 +23,8 @@ class Tag:
             meta["album"]["images"][0]["url"]
         )
         artists = ", ".join(meta["album"]["artists"])
+        lyric = LyricsSearcher(meta["name"], artists).search()
+
         tag = ID3(filename)
         tag["TIT2"] = TIT2(3, meta["name"])  # Title
         tag["TPE1"] = TPE1(3, artists)  # Artist
@@ -37,6 +40,9 @@ class Tag:
             desc="Album Cover",
             data=album_cover,
         )  # Album Cover
+
+        if lyric is not None:
+            tag["USLT"] = USLT(3, desc="Lyrics", text=lyric)
         tag.save(v2_version=3)  # ID3
 
         os.rename(
