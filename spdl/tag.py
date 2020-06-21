@@ -22,7 +22,8 @@ class Tag:
         album_cover = self._album_cover_download(
             meta["album"]["images"][0]["url"]
         )
-        artists = ", ".join(meta["album"]["artists"])
+        # album_artists = ", ".join(meta["album"]["artists"])
+        artists = ", ".join(meta["artist"])
         lyric = LyricsSearcher(meta["name"], artists).search()
 
         tag = ID3(filename)
@@ -42,7 +43,7 @@ class Tag:
         )  # Album Cover
 
         if lyric is not None:
-            tag["USLT"] = USLT(3, text=lyric)
+            tag["USLT"] = USLT(3, desc="", text=lyric)
         tag.save(v2_version=3)  # ID3
 
         os.rename(
