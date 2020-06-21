@@ -42,7 +42,7 @@ class Tag:
         )  # Album Cover
 
         if lyric is not None:
-            tag["USLT"] = USLT(3, desc="Lyrics", text=lyric)
+            tag["USLT"] = USLT(3, text=lyric)
         tag.save(v2_version=3)  # ID3
 
         os.rename(
