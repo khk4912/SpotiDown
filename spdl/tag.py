@@ -2,7 +2,18 @@ import os
 import re
 import requests
 from spdl.searcher.lyrics import LyricsSearcher
-from mutagen.id3 import ID3, TIT2, TALB, TPE1, TORY, TYER, APIC, TRCK, USLT
+from mutagen.id3 import (
+    ID3,
+    TIT2,
+    TALB,
+    TPE1,
+    TORY,
+    TYER,
+    APIC,
+    TRCK,
+    USLT,
+    TPE2,
+)
 
 
 class Tag:
@@ -18,17 +29,17 @@ class Tag:
         return subbed
 
     def apply_meta(self, filename: str, meta: dict):
-        # TODO : 그지같은 윈도우 위해 엘범 아티스트도 넣기
         album_cover = self._album_cover_download(
             meta["album"]["images"][0]["url"]
         )
-        # album_artists = ", ".join(meta["album"]["artists"])
+        album_artists = ", ".join(meta["album"]["artists"])
         artists = ", ".join(meta["artist"])
         lyric = LyricsSearcher(meta["name"], artists).search()
 
         tag = ID3(filename)
         tag["TIT2"] = TIT2(3, meta["name"])  # Title
         tag["TPE1"] = TPE1(3, artists)  # Artist
+        tag["TPE2"] = TPE2(3, album_artists)  # Album Artist
         tag["TALB"] = TALB(3, meta["album"]["name"])  # Album Title
         tag["TRCK"] = TRCK(3, str(meta["track_number"]))  # Track Number
         tag["TYER"] = TYER(

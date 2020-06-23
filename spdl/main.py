@@ -6,10 +6,8 @@ from spdl.searcher.youtube import YouTubeSearcher
 
 
 class Main:
-    def __init__(self):
-        pass
-
-    def download_playlist(self, playlist_url: str):
+    @staticmethod
+    def download_playlist(playlist_url: str):
         """
         플레이리스트를 다운하는 메소드입니다.
 
@@ -23,7 +21,7 @@ class Main:
         s.make_auth()
         playlist = s.playlist(playlist_url)
 
-        origin = os.curdir
+        origin = os.getcwd()
         playlist_name = tag._safe_name(playlist["playlist_name"])
         if not os.path.exists(playlist_name):
             os.mkdir(playlist_name)
@@ -34,20 +32,21 @@ class Main:
                 vid = YouTubeSearcher.search(
                     "{} - {}".format(", ".join(info["artist"]), info["name"])
                 )
+                f = dl.download(vid[0])
+                print("\n")
+                tag.apply_meta(f, info)
+
             except:
                 print(
-                    "Ignore {} - {}".format(
+                    "Ignoring {} - {}".format(
                         ", ".join(info["artist"]), info["name"]
                     )
                 )
                 continue
-
-            f = dl.download(vid[0])
-            print("\n")
-            tag.apply_meta(f, info)
         os.chdir(origin)
 
-    def download_track(self, track_url: str):
+    @staticmethod
+    def download_track(track_url: str):
 
         s = SpotifySearcher()
         dl = Downloader()
@@ -60,18 +59,20 @@ class Main:
             vid = YouTubeSearcher.search(
                 "{} - {}".format(", ".join(info["artist"]), info["name"])
             )
+
+            f = dl.download(vid[0])
+            print("\n")
+            tag.apply_meta(f, info)
+
         except:
             print(
-                "Ignore {} - {}".format(
+                "Ignoring {} - {}".format(
                     ", ".join(info["artist"]), info["name"]
                 )
             )
 
-        f = dl.download(vid[0])
-        print("\n")
-        tag.apply_meta(f, info)
-
-    def download_album(self, album_url: str):
+    @staticmethod
+    def download_album(album_url: str):
 
         s = SpotifySearcher()
         dl = Downloader()
@@ -81,7 +82,7 @@ class Main:
         album = s.album(album_url)
         album_name = tag._safe_name(album["album_name"])
 
-        origin = os.curdir
+        origin = os.getcwd()
         if not os.path.exists(album_name):
             os.mkdir(album_name)
         os.chdir(album_name)
@@ -91,15 +92,17 @@ class Main:
                 vid = YouTubeSearcher.search(
                     "{} - {}".format(", ".join(info["artist"]), info["name"])
                 )
+
+                f = dl.download(vid[0])
+                print("\n")
+                tag.apply_meta(f, info)
+
             except:
                 print(
-                    "Ignore {} - {}".format(
+                    "Ignoring {} - {}".format(
                         ", ".join(info["artist"]), info["name"]
                     )
                 )
                 continue
-            f = dl.download(vid[0])
-            print("\n")
-            tag.apply_meta(f, info)
 
         os.chdir(origin)
